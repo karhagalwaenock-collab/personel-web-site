@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Personal Website</title>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        /* Blurred fixed top bar (glassmorphism effect) */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+            transition: all 0.4s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .navbar nav ul li {
+            margin: 0 25px;
+        }
+
+        .navbar nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .navbar.scrolled nav ul li a {
+            color: #333;
+        }
+
+        .navbar nav ul li a:hover {
+            color: #00d4ff;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+        }
+
+        /* Sections */
+        section {
+            padding: 120px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 60px;
+            color: #333;
+        }
+
+        /* About */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .profile-img {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 8px solid #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .about-text {
+            max-width: 600px;
+            font-size: 1.15rem;
+            line-height: 1.8;
+        }
+
+        /* Skills with percentage + icons */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+        }
+
+        .skill-item {
+            background: #a4a2a2;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .skill-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .skill-header i {
+            font-size: 2.2rem;
+            margin-right: 15px;
+            width: 50px;
+            text-align: center;
+        }
+
+        .progress-container {
+            background: #e0e0e0;
+            border-radius: 50px;
+            height: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0; /* Will be animated by JS */
+            background: linear-gradient(90deg, #5c70c6, #764ba2);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: #fff;
+            font-weight: bold;
+            transition: width 2s cubic-bezier(0.65, 0.05, 0.36, 1);
+        }
+
+        /* Contact / Social Icons */
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .social-icons a {
+            color: #333;
+            font-size: 3rem;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #667eea;
+            transform: translateY(-8px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3.5rem; }
+            .hero p { font-size: 1.4rem; }
+            .about-content { flex-direction: column; text-align: center; }
+            .navbar nav ul { flex-direction: column; padding: 15px 0; }
+            .navbar nav ul li { margin: 10px 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Blurred Top Bar -->
+    <header class="navbar" id="navbar">
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <h1>KARHAGALWA MUNGUAKONKWA ENOCK</h1>
+        <p>Full Stack Developer & UI/UX Designer</p>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+        <h2>About Me</h2>
+        <div class="about-content">
+            <img src="images/buzba.jpg" alt="Your Photo" class="profile-img">
+            <div class="about-text">
+                <p>Hello! I'm Enock karhagalwa a passionate developer with expertise in modern web technologies. I love creating beautiful, functional, and user-friendly websites and applications.</p>
+                <p>I specialize in React, Node.js, Python, and modern CSS techniques. When I'm not coding, you can find me exploring new design trends or contributing to open-source projects.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills with Percentage Ratings + Icons -->
+    <section id="skills" style="background: #f1f3f5;">
+        <h2>My Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-item">
+                <div class="skill-header">
+                    <i class="fab fa-html5" style="color: #e34c26;"></i>
+                    <span>HTML5</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill" data-percent="95">
+                        <span>95%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <i class="fab fa-css3-alt" style="color: #264de4;"></i>
+                    <span>CSS3</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill" data-percent="90">
+                        <span>90%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <i class="fab fa-js" style="color: #f0db4f;"></i>
+                    <span>JavaScript</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill" data-percent="85">
+                        <span>85%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <i class="fab fa-react" style="color: #61dbfb;"></i>
+                    <span>React</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill" data-percent="88">
+                        <span>88%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <i class="fab fa-python" style="color: #3776ab;"></i>
+                    <span>Python</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill" data-percent="82">
+                        <span>82%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="skill-item">
+                <div class="skill-header">
+                    <i class="fab fa-node-js" style="color: #68a063;"></i>
+                    <span>Node.js</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-fill" data-percent="78">
+                        <span>78%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <h2>Get In Touch</h2>
+        <p style="text-align: center; font-size: 1.2rem; max-width: 700px; margin: 0 auto 50px;">
+            I'm always open to discussing new projects, creative ideas or opportunities.
+        </p>
+        <div class="social-icons">
+            <a href="https://github.com/yourusername" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/yourusername" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://twitter.com/yourusername" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="mailto:your.email@example.com"><i class="fas fa-envelope"></i></a>
+        </div>
+    </section>
+
+    <script>
+        // Navbar background change + blur enhancement on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Animate skill bars when they come into view
+        const progressFills = document.querySelectorAll('.progress-fill');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const fill = entry.target;
+                    const percent = fill.getAttribute('data-percent');
+                    fill.style.width = percent + '%';
+                    fill.querySelector('span').textContent = percent + '%';
+
+                    // Counter animation
+                    let count = 0;
+                    const interval = setInterval(() => {
+                        if (count <= percent) {
+                            fill.querySelector('span').textContent = count + '%';
+                            count++;
+                        } else {
+                            clearInterval(interval);
+                        }
+                    }, 20);
+
+                    observer.unobserve(entry.target); // Run only once
+                }
+            });
+        }, { threshold: 0.4 });
+
+        progressFills.forEach(fill => {
+            observer.observe(fill);
+        });
+    </script>
+</body>
+</html>
